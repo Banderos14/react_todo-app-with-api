@@ -14,6 +14,7 @@ import { UserWarning } from './UserWarning';
 
 const API_URL = 'https://mate.academy/students-api/todos';
 const USER_ID = 4203;
+const RESPONSE_DELAY = 300;
 
 type Todo = {
   id: number;
@@ -59,6 +60,11 @@ const request = async <T,>(url: string, options?: RequestInit): Promise<T> => {
 
   return response.json();
 };
+
+const wait = (delay: number) =>
+  new Promise(resolve => {
+    setTimeout(resolve, delay);
+  });
 
 export const App: React.FC = () => {
   const userId = getUserId();
@@ -189,6 +195,7 @@ export const App: React.FC = () => {
         }),
       });
 
+      await wait(RESPONSE_DELAY);
       setTodos(current => [...current, createdTodo]);
       setNewTitle('');
     } catch {
@@ -213,6 +220,7 @@ export const App: React.FC = () => {
         }
       });
 
+      await wait(RESPONSE_DELAY);
       setTodos(current => current.filter(todo => todo.id !== todoId));
 
       if (editingId === todoId) {
@@ -242,6 +250,7 @@ export const App: React.FC = () => {
         body: JSON.stringify(data),
       });
 
+      await wait(RESPONSE_DELAY);
       setTodos(current =>
         current.map(todo =>
           todo.id === todoId ? { ...todo, ...updatedTodo } : todo,
